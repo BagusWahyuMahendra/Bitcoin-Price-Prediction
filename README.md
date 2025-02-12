@@ -100,51 +100,106 @@ Setelah dataset diunduh menggunakan kode di atas, informasi yang kita dapat anta
 
 ## Data Preparation
 Tahapan persiapan data meliputi:
-- Normalisasi data: Menggunakan MinMaxScaler untuk mengubah harga Bitcoin dalam rentang 0-1 agar model lebih stabil.
-- Pembuatan dataset untuk model LSTM dan GRU: Menggunakan sliding window dengan window size 100 hari untuk membuat input data.
-- Pembagian dataset: 80% data digunakan untuk pelatihan dan 20% untuk pengujian.
+- **Normalisasi data**
+Normalisasi merupakan proses skala ulang data agar berada dalam rentang tertentu. Pada proyek ini, digunakan MinMaxScaler dari library `sklearn.preprocessing`, dengan rentang 0 hingga 1. Langkah ini dilakukan untuk meningkatkan stabilitas model dalam menangani berbagai skala nilai harga Bitcoin. Normalisasi juga membantu jaringan LSTM dalam melakukan komputasi secara lebih efisien dengan menghindari nilai ekstrem yang dapat menyebabkan eksplositas gradien atau vanishing gradient problem.
+- **Pembuatan Dataset untuk LSTM (Windowing)**
+Setelah data dinormalisasi, langkah selanjutnya adalah membentuk dataset yang sesuai untuk model LSTM. LSTM memanfaatkan sekuens data sebagai input, sehingga dilakukan proses windowing dengan panjang 100 hari. Pada proses ini, setiap 100 hari sebelumnya digunakan sebagai fitur `x_data`. Nilai harga penutupan hari ke-101 digunakan sebagai target `y_data`. Proses ini penting karena LSTM bekerja dengan memori jangka panjang, di mana nilai masa lalu berkontribusi dalam memprediksi nilai masa depan. Dengan window size 100, model dapat memahami pola pergerakan harga berdasarkan data historis dalam 100 hari terakhir.
+- **Pembagian dataset**
+Membagi dataset menjadi data latih (training set) dan data uji (testing set). Pembagian dilakukan dengan proporsi 80% untuk training dan 20% untuk testing. Pembagian ini penting untuk menghindari overfitting, di mana model terlalu menyesuaikan diri dengan data latih tetapi kurang mampu melakukan generalisasi terhadap data baru
 
 ## Modeling
 Dua model deep learning yang digunakan:
 ### LSTM Model
-- Layer pertama: LSTM dengan 128 unit dan return_sequences=True.
+LSTM (Long Short-Term Memory) adalah jenis jaringan saraf berulang (RNN) yang dirancang untuk menangani permasalahan long-term dependencies dalam data deret waktu. LSTM memiliki sel memori yang dapat mempertahankan informasi untuk jangka waktu yang lebih lama dibandingkan RNN standar, sehingga cocok untuk prediksi harga Bitcoin yang bersifat time series.
+- Layer pertama: LSTM dengan 128 unit dan `return_sequences=True`
 - Layer kedua: LSTM dengan 64 unit.
 - Fully connected layer dengan 25 unit.
-- Output layer dengan 1 unit.
-(gambar model summary)
+- Output layer dengan 1 unit. <br>
+Model summary:
+
+| Layer (type) | Output Shape | Param # |
+|-------------|-------------|---------|
+| **lstm (LSTM)** | (None, 100, 128) | 66,560 |
+| **lstm_1 (LSTM)** | (None, 64) | 49,408 |
+| **dense (Dense)** | (None, 25) | 1,625 |
+| **dense_1 (Dense)** | (None, 1) | 26 |
+
+ Total params: 117,619 (459.45 KB)
+ Trainable params: 117,619 (459.45 KB)
+ Non-trainable params: 0 (0.00 B)
 
 ### GRU Model
-- Layer pertama: GRU dengan 128 unit dan return_sequences=True.
+GRU (Gated Recurrent Unit) adalah varian dari LSTM yang lebih sederhana dan efisien karena memiliki lebih sedikit parameter dibandingkan LSTM. GRU menggabungkan forget gate dan input gate menjadi satu update gate, sehingga dapat mempercepat proses training sambil tetap mempertahankan performa yang baik dalam menangani data sekuensial seperti harga Bitcoin.
+- Layer pertama: GRU dengan 128 unit dan `return_sequences=True`.
 - Layer kedua: GRU dengan 64 unit.
 - Fully connected layer dengan 25 unit.
-- Output layer dengan 1 unit.
-(gambar model summary)
+- Output layer dengan 1 unit. <br>
+Model summary:
 
-(buat tabel perbedaan keduanya)
-(kelebihan dan kekurangan)
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan kelebihan dan kekurangan dari setiap algoritma yang digunakan.
-- Jika menggunakan satu algoritma pada solution statement, lakukan proses improvement terhadap model dengan hyperparameter tuning. **Jelaskan proses improvement yang dilakukan**.
-- Jika menggunakan dua atau lebih algoritma pada solution statement, maka pilih model terbaik sebagai solusi. **Jelaskan mengapa memilih model tersebut sebagai model terbaik**.
+| Layer (type) | Output Shape | Param # |
+|-------------|-------------|---------|
+| **gru (GRU)** | (None, 100, 128) | 50,304 |
+| **gru_1 (GRU)** | (None, 64) | 37,248 |
+| **dense_2 (Dense)** | (None, 25) | 1,625 |
+| **dense_3 (Dense)** | (None, 1) | 26 |
+
+ Total params: 89,203 (348.45 KB)
+ Trainable params: 89,203 (348.45 KB)
+ Non-trainable params: 0 (0.00 B)
+
+### Kelebihan dan Kekurangan LSTM dan GRU
+| Faktor                | LSTM (Long Short-Term Memory)                              | GRU (Gated Recurrent Unit)                              |
+|-----------------------|----------------------------------------------------------|----------------------------------------------------------|
+| **Struktur Arsitektur** | Memiliki tiga gerbang utama: Forget, Input, dan Output.  | Memiliki dua gerbang utama: Update dan Reset.           |
+| **Jumlah Parameter**   | Lebih banyak parameter karena struktur yang lebih kompleks. | Lebih sedikit parameter, lebih sederhana dibandingkan LSTM. |
+| **Kemampuan Menangani Long-Term Dependencies** | Sangat baik dalam menangani long-term dependencies. | Baik, tetapi terkadang tidak seefektif LSTM untuk data dengan pola sangat panjang. |
+| **Kecepatan Training** | Lebih lambat karena kompleksitas arsitektur yang lebih tinggi. | Lebih cepat dibandingkan LSTM karena memiliki struktur lebih sederhana. |
+| **Efisiensi Komputasi** | Memerlukan lebih banyak daya komputasi. | Lebih efisien secara komputasi dibandingkan LSTM. |
+| **Akurasi Prediksi** | Biasanya lebih akurat untuk data time series yang kompleks. | Akurat, tetapi bisa sedikit lebih rendah dari LSTM dalam beberapa kasus. |
+| **Kapasitas Generalisasi** | Dapat menangkap pola yang lebih kompleks dengan lebih baik. | Dapat bekerja dengan baik dalam berbagai skenario dengan parameter yang lebih sedikit. |
+| **Overfitting** | Cenderung lebih rentan terhadap overfitting jika tidak dikontrol dengan baik. | Lebih sedikit kemungkinan overfitting karena struktur yang lebih ringkas. |
 
 ## Evaluation
-Metrik evaluasi yang digunakan:
-- Root Mean Squared Error (RMSE): Mengukur seberapa jauh prediksi dari nilai sebenarnya.
-- Mean Absolute Error (MAE): Mengukur rata-rata selisih absolut antara nilai prediksi dan aktual.
-- R-squared (R2 Score): Mengukur seberapa baik model menjelaskan variabilitas data.
+Dalam tahap evaluasi, model yang telah dilatih diuji menggunakan metrik evaluasi yang sesuai dengan konteks data, problem statement, dan solusi yang diinginkan. Pada proyek ini, tiga metrik evaluasi utama yang digunakan adalah Root Mean Squared Error (RMSE), Mean Absolute Error (MAE), dan R-squared (R²).
+- **Root Mean Squared Error (RMSE)**
+RMSE mengukur seberapa jauh prediksi model dari nilai sebenarnya dalam satuan yang sama dengan data asli. RMSE dihitung menggunakan formula berikut:
+<br>
+    **RMSE = $\sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}$**
+<br>
+  Semakin kecil nilai RMSE, semakin baik model dalam melakukan prediksi. RMSE lebih sensitif terhadap outlier, karena menggunakan kuadrat dari selisih antara nilai prediksi dan nilai aktual.
 
-Hasil Evaluasi:
-- LSTM Model:
-RMSE: X
+- **Mean Absolute Error (MAE)**
+Mengukur rata-rata selisih absolut antara nilai prediksi dan aktual. Formula MAE adalah:
+<br>
+**MAE = $\frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|$**
+<br>
+  - MAE tidak mengkuadratkan error sehingga tidak terlalu sensitif terhadap outlier.
+  - Semakin kecil nilai MAE, semakin baik model dalam memprediksi nilai harga Bitcoin.
 
-MAE: X
+- **R-squared (R2 Score)**
+R² atau Koefisien Determinasi mengukur seberapa baik model dapat menjelaskan variasi data aktual. Formula R² adalah:
+<br>
+$R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}$
+<br>
+  - Nilai R² mendekati 1 menunjukkan bahwa model dapat menjelaskan variasi data dengan baik.
+  - Jika R² bernilai 0 atau negatif, berarti model tidak lebih baik dibandingkan model sederhana (seperti rata-rata nilai).
 
-R-squared: X
+**Hasil Evaluasi**
+| Model  | RMSE ↓    | MAE ↓    | R² ↑     |
+|--------|----------|----------|---------|
+| **LSTM** | 2328.39  | 1905.02  | 0.9903  |
+| **GRU**  | 1752.94  | 1177.40  | 0.9945  |
 
-- GRU Model:
-RMSE: X
+## Kesimpulan
+Model prediksi harga Bitcoin menggunakan Deep Learning telah dievaluasi dengan dua jenis arsitektur jaringan saraf, yaitu LSTM dan GRU. Dari hasil tersebut, GRU menunjukkan performa yang lebih baik dibandingkan LSTM dalam hal:
 
-MAE: X
+- Error lebih rendah → RMSE dan MAE pada GRU lebih kecil dibandingkan LSTM, yang berarti prediksi harga Bitcoin menggunakan GRU lebih akurat.
+- R-squared lebih tinggi → Nilai R² pada GRU lebih tinggi dibandingkan LSTM (0.9946 vs 0.9923), yang menunjukkan bahwa model GRU lebih mampu menjelaskan variabilitas data harga Bitcoin.
 
-R-squared: X
+Berdasarkan hasil evaluasi, model GRU lebih direkomendasikan untuk digunakan dalam prediksi harga Bitcoin karena:
 
+✅ Memiliki akurasi lebih tinggi (error lebih kecil dan R² lebih besar).
+
+✅ Lebih ringan secara komputasi dibandingkan LSTM.
+
+✅ Cocok untuk dataset dengan urutan panjang seperti time series.
