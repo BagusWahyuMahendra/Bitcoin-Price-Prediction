@@ -62,17 +62,41 @@ Setelah dataset diunduh menggunakan kode di atas, informasi yang kita dapat anta
 - Volume: Volume perdagangan Bitcoin dalam satu hari.
 
 ### Exploratory Data Analysis
-- Mengidentifikasi Missing Value dan Outlier
+- **Mengidentifikasi Missing Value dan Outlier**
+    <br>
+    <image src='https://raw.githubusercontent.com/BagusWahyuMahendra/Bitcoin-Price-Prediction/main/images/boxplot-outlier.png' width= 500/>
+    <br> Karena Bitcoin dikenal memiliki volatilitas harga yang tinggi. Lonjakan harga atau volume yang ekstrem sering kali mencerminkan sentimen pasar, pengaruh berita besar, atau aktivitas institusional. Menghapus outlier dapat menghilangkan informasi penting yang bisa membantu model dalam memprediksi tren harga di masa depan, maka dari itu outlier pada dataset tidak dihapus.
 
-- Univariate Analysis for Numerical Features
+- **Univariate Analysis for Numerical Features**
+    <br>
+    <image src='https://raw.githubusercontent.com/BagusWahyuMahendra/Bitcoin-Price-Prediction/main/images/univariate-analysis.png' width= 500>
+    <br> Berdasarkan histogram di atas, kita mendapatkan beberapa informasi, antara lain:
+    - Semua fitur harga Bitcoin (Open, High, Low, Close) dan Volume menunjukkan distribusi yang condong ke kiri (positively skewed).
+    - Sebagian besar data harga Bitcoin berada di bawah 20.000 USD, dengan frekuensi tinggi pada nilai yang lebih rendah. Ini menunjukkan bahwa harga Bitcoin lebih sering berada di kisaran rendah dibandingkan harga tertinggi yang jarang terjadi.
+    - Histogram volume menunjukkan rentang nilai yang luas, dengan sebagian besar transaksi terjadi pada volume yang relatif kecil, tetapi ada beberapa lonjakan volume yang sangat tinggi.
 
-- Multivariate Analysis for Numerical Features
+- **Multivariate Analysis for Numerical Features**
+    <br>
+    <image src='https://raw.githubusercontent.com/BagusWahyuMahendra/Bitcoin-Price-Prediction/main/images/multivariate-analysis.png' width= 500/>
+    <br> Berdasarkan hasil pair plot di atas, informasi yang kita dapat antara lain:
+    - Hubungan Linier Kuat antara Open, High, Low, dan Close
+    - Volume memiliki hubungan yang lebih variatif
+    - Histogram diagonal menunjukkan bahwa distribusi data cenderung skewed ke kiri (positively skewed), dengan sebagian besar nilai berada pada kisaran rendah.
 
-- Heatmap untuk melihat korelasi antar fitur. (gambar)
+- **Heatmap untuk melihat korelasi antar fitur**
+    <br>
+    <image src='https://raw.githubusercontent.com/BagusWahyuMahendra/Bitcoin-Price-Prediction/main/images/multivariate-analysis.png' width= 500/>
+    <br> Heatmap di atas menunjukkan korelasi antara berbagai fitur dalam dataset harga Bitcoin. Terlihat bahwa Close, High, Low, dan Open BTC-USD memiliki korelasi sempurna (1.00), menandakan bahwa harga-harga ini bergerak bersamaan. Volume BTC-USD memiliki korelasi sekitar 0.65-0.67 dengan harga, menunjukkan hubungan yang cukup kuat tetapi tidak sebesar fitur harga lainnya.
 
-- Plot tren harga Bitcoin sepanjang waktu. (gambar)
+- **Plot tren harga Bitcoin sepanjang waktu**
+    <br>
+    <image src='https://raw.githubusercontent.com/BagusWahyuMahendra/Bitcoin-Price-Prediction/main/images/btc-trend.png' width= 500/>
+    <br> Grafik di atas menunjukkan tren harga Bitcoin dari tahun 2015 hingga sekarang, dengan sumbu horizontal merepresentasikan waktu dan sumbu vertikal menunjukkan harga dalam satuan USD. Dari grafik, terlihat bahwa harga Bitcoin mengalami volatilitas tinggi dengan beberapa lonjakan signifikan, terutama pada tahun 2017, 2021, dan 2024. Peningkatan harga yang tajam diikuti oleh koreksi yang cukup besar mencerminkan sifat spekulatif pasar kripto. Tren kenaikan jangka panjang menunjukkan bahwa meskipun mengalami fluktuasi besar, Bitcoin cenderung mengalami apresiasi nilai seiring waktu.
 
-- Moving Average (MA) 100 dan 250 hari untuk melihat pola pergerakan harga jangka panjang. (gambar)
+- **Moving Average (MA) 100 dan 250 hari untuk melihat pola pergerakan harga jangka panjang**
+    <br>
+    <image src='https://raw.githubusercontent.com/BagusWahyuMahendra/Bitcoin-Price-Prediction/main/images/moving-average.png' width= 500/>
+    <br> Grafik di atas menampilkan pergerakan harga Bitcoin dengan tambahan indikator Moving Average (MA) 100-hari dan 250-hari, yang ditampilkan sebagai garis putus-putus berwarna oranye dan hijau. Indikator MA membantu mengidentifikasi tren pasar dengan meratakan fluktuasi harga jangka pendek, di mana MA 100-hari lebih responsif terhadap perubahan dibandingkan MA 250-hari yang lebih stabil. Ketika harga Bitcoin berada di atas MA, ini sering mengindikasikan tren bullish, sementara jika berada di bawah MA, ini dapat menjadi sinyal bearish. Analisis MA penting dalam memprediksi harga Bitcoin karena membantu mengurangi noise pasar, memberikan gambaran tren yang lebih jelas, serta digunakan untuk mendeteksi potensi titik masuk dan keluar yang lebih strategis dalam perdagangan kripto.
 
 ## Data Preparation
 Tahapan persiapan data meliputi:
