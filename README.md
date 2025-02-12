@@ -208,7 +208,7 @@ $$
 Model prediksi harga Bitcoin menggunakan Deep Learning telah dievaluasi dengan dua jenis arsitektur jaringan saraf, yaitu LSTM dan GRU. Dari hasil tersebut, GRU menunjukkan performa yang lebih baik dibandingkan LSTM dalam hal:
 
 - Error lebih rendah → RMSE dan MAE pada GRU lebih kecil dibandingkan LSTM, yang berarti prediksi harga Bitcoin menggunakan GRU lebih akurat.
-- R-squared lebih tinggi → Nilai R² pada GRU lebih tinggi dibandingkan LSTM (0.9946 vs 0.9923), yang menunjukkan bahwa model GRU lebih mampu menjelaskan variabilitas data harga Bitcoin.
+- R-squared lebih tinggi → Nilai R² pada GRU lebih tinggi dibandingkan LSTM (0.9945 vs 0.9903), yang menunjukkan bahwa model GRU lebih mampu menjelaskan variabilitas data harga Bitcoin.
 
 Berdasarkan hasil evaluasi, model GRU lebih direkomendasikan untuk digunakan dalam prediksi harga Bitcoin karena:
 
