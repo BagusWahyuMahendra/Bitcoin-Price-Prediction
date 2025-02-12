@@ -161,30 +161,44 @@ Model summary:
 
 ## Evaluation
 Dalam tahap evaluasi, model yang telah dilatih diuji menggunakan metrik evaluasi yang sesuai dengan konteks data, problem statement, dan solusi yang diinginkan. Pada proyek ini, tiga metrik evaluasi utama yang digunakan adalah Root Mean Squared Error (RMSE), Mean Absolute Error (MAE), dan R-squared (R²).
-- **Root Mean Squared Error (RMSE)**
+
+### **Root Mean Squared Error (RMSE)**
 RMSE mengukur seberapa jauh prediksi model dari nilai sebenarnya dalam satuan yang sama dengan data asli. RMSE dihitung menggunakan formula berikut:
-<br>
-    **RMSE = $\sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}$**
-<br>
-  Semakin kecil nilai RMSE, semakin baik model dalam melakukan prediksi. RMSE lebih sensitif terhadap outlier, karena menggunakan kuadrat dari selisih antara nilai prediksi dan nilai aktual.
 
-- **Mean Absolute Error (MAE)**
-Mengukur rata-rata selisih absolut antara nilai prediksi dan aktual. Formula MAE adalah:
-<br>
-**MAE = $\frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|$**
-<br>
-  - MAE tidak mengkuadratkan error sehingga tidak terlalu sensitif terhadap outlier.
-  - Semakin kecil nilai MAE, semakin baik model dalam memprediksi nilai harga Bitcoin.
+$$
+RMSE = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}
+$$
 
-- **R-squared (R2 Score)**
+- Semakin kecil nilai RMSE, semakin baik model dalam melakukan prediksi.
+- RMSE lebih sensitif terhadap outlier, karena menggunakan kuadrat dari selisih antara nilai prediksi dan nilai aktual.
+
+---
+
+### **Mean Absolute Error (MAE)**
+MAE mengukur rata-rata selisih absolut antara nilai prediksi dan aktual. Formula MAE adalah:
+
+$$
+MAE = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|
+$$
+
+- MAE tidak mengkuadratkan error sehingga tidak terlalu sensitif terhadap outlier.
+- Semakin kecil nilai MAE, semakin baik model dalam memprediksi nilai harga Bitcoin.
+
+---
+
+### **R-squared (R² Score)**
 R² atau Koefisien Determinasi mengukur seberapa baik model dapat menjelaskan variasi data aktual. Formula R² adalah:
-<br>
-$R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}$
-<br>
-  - Nilai R² mendekati 1 menunjukkan bahwa model dapat menjelaskan variasi data dengan baik.
-  - Jika R² bernilai 0 atau negatif, berarti model tidak lebih baik dibandingkan model sederhana (seperti rata-rata nilai).
 
-**Hasil Evaluasi**
+$$
+R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y_i})^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}
+$$
+
+- Nilai R² mendekati 1 menunjukkan bahwa model dapat menjelaskan variasi data dengan baik.
+- Jika R² bernilai 0 atau negatif, berarti model tidak lebih baik dibandingkan model sederhana (seperti rata-rata nilai).
+
+---
+
+### **Hasil Evaluasi**
 | Model  | RMSE ↓    | MAE ↓    | R² ↑     |
 |--------|----------|----------|---------|
 | **LSTM** | 2328.39  | 1905.02  | 0.9903  |
