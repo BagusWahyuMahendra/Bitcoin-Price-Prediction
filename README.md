@@ -1,6 +1,7 @@
 # Laporan Proyek Machine Learning - Bagus Wahyu
 
 ## Domain Proyek
+Mata uang kripto merupakan salah satu bentuk uang digital yang semakin populer dan diminati oleh masyarakat saat ini. Jenis mata uang ini telah dikenal luas dan menjadi fenomena global yang menarik perhatian banyak orang. Seiring berjalannya waktu, perkembangan mata uang digital terus mengalami peningkatan yang signifikan setiap tahunnya, dengan Bitcoin (BTC) menjadi salah satu aset digital yang paling bernilai saat ini [1].
 
 Bitcoin sebagai mata uang digital terdesentralisasi telah mengubah sistem keuangan, menawarkan keamanan, transparansi, dan efisiensi. Namun, volatilitas nilai Bitcoin menjadi tantangan bagi investor dan pelaku pasar. Untuk mengatasi hal ini, riset tentang prediksi harga Bitcoin menggunakan kecerdasan buatan menjadi penting.
 
@@ -8,11 +9,13 @@ Prediksi harga Bitcoin berguna bagi investor untuk memperkirakan harga di masa d
 
 Fluktuasi harga Bitcoin yang tinggi dapat memberikan peluang investasi, tetapi juga berisiko. Oleh karena itu, diperlukan pendekatan berbasis machine learning untuk memahami pola harga dan membuat prediksi berdasarkan data historis. Model prediksi dibuat dengan algoritma deep learning LSTM dan GRU untuk membandingkan model yang mana melakukan prediksi lebih baik. 
 
-Berdasarkan hasil studi literatur yang telah dilakukan, Model Long Short Term Memory (LSTM) digunakan dalam skripsi yang berjudul "Prediksi Harga Bitcoin Menggunakan Metode Long Short Term Memory" untuk memprediksi harga Bitcoin karena kemampuannya mengingat informasi dalam periode waktu yang lebih panjang. LSTM adalah jenis jaringan saraf tiruan (Recurrent Neural Network/RNN) yang dirancang untuk memproses data berurutan dan mengatasi masalah dependensi jangka panjang yang tidak dapat ditangani oleh model RNN tradisional. Pada penelitian ini, model dievaluasi menggunakan metrik RMSE sebesar 478.237, MAE 330.322, dan MAPE 99.01%, yang menunjukkan bahwa akurasi prediksi masih perlu ditingkatkan. Meskipun model dan website yang dikembangkan dapat melakukan prediksi, tingkat error yang cukup tinggi mengindikasikan perlunya optimasi lebih lanjut, seperti tuning parameter atau kombinasi dengan metode lain agar prediksi harga Bitcoin lebih akurat dan andal.
-  
+Berdasarkan hasil studi literatur yang telah dilakukan, Model Long Short Term Memory (LSTM) digunakan dalam skripsi yang berjudul "Prediksi Harga Bitcoin Menggunakan Metode Long Short Term Memory" untuk memprediksi harga Bitcoin karena kemampuannya mengingat informasi dalam periode waktu yang lebih panjang. LSTM adalah jenis jaringan saraf tiruan (Recurrent Neural Network/RNN) yang dirancang untuk memproses data berurutan dan mengatasi masalah dependensi jangka panjang yang tidak dapat ditangani oleh model RNN tradisional [1]. Pada penelitian ini, model dievaluasi menggunakan metrik RMSE sebesar 478.237, MAE 330.322, dan MAPE 99.01%, yang menunjukkan bahwa akurasi prediksi masih perlu ditingkatkan. Meskipun model dan website yang dikembangkan dapat melakukan prediksi, tingkat error yang cukup tinggi mengindikasikan perlunya optimasi lebih lanjut, seperti tuning parameter atau kombinasi dengan metode lain agar prediksi harga Bitcoin lebih akurat dan andal.
+
 Maka dari itu, pembuatan proyek ini bertujuan untuk melakukan perbandingan terhadap model LSTM dan GRU dalam memprediksi harga bitcoin.
 
-Referensi: [Prediksi Harga Bitcoin Menggunakan Metode Long Short Term Memory](https://repository.unja.ac.id/62231/6/FULL%20SKRIPSI.pdf) 
+**Referensi**
+
+[1] M. F. Ramadhan, "Prediksi Harga Bitcoin Menggunakan Metode Long Short Term Memory," Skripsi, Universitas Jambi, 2024. [Online]. Available: https://repository.unja.ac.id/62231/6/FULL%20SKRIPSI.pdf
 
 ## Business Understanding
 
@@ -33,6 +36,7 @@ Menjelaskan tujuan dari pernyataan masalah:
 
 ## Data Understanding
 Dataset yang digunakan diperoleh dari Yahoo Finance dengan simbol BTC-USD. Data ini mencakup harga penutupan harian Bitcoin selama 10 tahun terakhir yang berjumlah 3654 baris.
+Sumber dataset: [Bitcoin (BTC) to USD Historical Data - Yahoo Finance](https://finance.yahoo.com/quote/BTC-USD/history/)
 
 Data di load menggunakan kode berikut:
 ```sh
@@ -47,11 +51,11 @@ pip install yfinance
 import yfinance as yf
 ```
 
-Setelah dataset diunduh menggunakan kode di atas, informasi yang kita dapat antara lain:
-- Terdapat 3654 baris yang berisi informasi mengenai data riwayat harga bitcoin saat ini, sampai dengan 10 tahun terakhir.
-- Terdapat 5 kolom, yaitu Close, High, Low, Open, dan Volume.
+Setelah dataset diunduh menggunakan kode di atas, informasi yang  didapatkan antara lain:
+- Terdapat **3654** baris yang berisi informasi mengenai data riwayat harga bitcoin saat ini, sampai dengan 10 tahun terakhir.
+- Terdapat **5 kolom**, yaitu Close, High, Low, Open, dan Volume.
 - 4 kolom, yaitu Close, High, Low, dan Open memiliki tipe data float64 dan terdapat 1 kolom, yaitu Volume yang memiliki tipe data int64.
-- Tidak terdapat missing value pada dataset.
+- **Tidak terdapat missing** value pada dataset.
 
 ### Variabel-variabel dataset Bitcoin
 - Date: Tanggal pencatatan harga Bitcoin.
@@ -70,7 +74,7 @@ Setelah dataset diunduh menggunakan kode di atas, informasi yang kita dapat anta
 - **Univariate Analysis for Numerical Features**
     <br>
     <image src='https://raw.githubusercontent.com/BagusWahyuMahendra/Bitcoin-Price-Prediction/main/images/univariate-analysis.png' width= 500>
-    <br> Berdasarkan histogram di atas, kita mendapatkan beberapa informasi, antara lain:
+    <br> Berdasarkan histogram di atas, terdapat beberapa informasi, antara lain:
     - Semua fitur harga Bitcoin (Open, High, Low, Close) dan Volume menunjukkan distribusi yang condong ke kiri (positively skewed).
     - Sebagian besar data harga Bitcoin berada di bawah 20.000 USD, dengan frekuensi tinggi pada nilai yang lebih rendah. Ini menunjukkan bahwa harga Bitcoin lebih sering berada di kisaran rendah dibandingkan harga tertinggi yang jarang terjadi.
     - Histogram volume menunjukkan rentang nilai yang luas, dengan sebagian besar transaksi terjadi pada volume yang relatif kecil, tetapi ada beberapa lonjakan volume yang sangat tinggi.
@@ -78,7 +82,7 @@ Setelah dataset diunduh menggunakan kode di atas, informasi yang kita dapat anta
 - **Multivariate Analysis for Numerical Features**
     <br>
     <image src='https://raw.githubusercontent.com/BagusWahyuMahendra/Bitcoin-Price-Prediction/main/images/multivariate-analysis.png' width= 500/>
-    <br> Berdasarkan hasil pair plot di atas, informasi yang kita dapat antara lain:
+    <br> Berdasarkan hasil pair plot di atas, informasi yang didapatkan antara lain:
     - Hubungan Linier Kuat antara Open, High, Low, dan Close
     - Volume memiliki hubungan yang lebih variatif
     - Histogram diagonal menunjukkan bahwa distribusi data cenderung skewed ke kiri (positively skewed), dengan sebagian besar nilai berada pada kisaran rendah.
